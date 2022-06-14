@@ -1,3 +1,5 @@
+import unittest
+from unittest import result
 from selenium import webdriver
 import requests
 import json
@@ -66,17 +68,17 @@ list_of_jobs = get_job_details(job_containers)
 # with open("jobs.json", "w") as outfile:
 #     json.dump(list_of_jobs, outfile, indent=4)
             
-df = pd.DataFrame(data= list_of_jobs, columns=(['Job Link', 'Unique ID', 
-                                                'Title', 'Company Name', 
-                                                'Company Location', 'Salary']))
-# print(df)
+# df = pd.DataFrame(data= list_of_jobs, columns=(['Job Link', 'Unique ID', 
+#                                                 'Title', 'Company Name', 
+#                                                 'Company Location', 'Salary']))
+# # print(df)
 
 
 
-
-iris = sns.load_dataset('iris')
-iris.head()
-
+class TestCalc(unittest.TestCase):
+    def add_test(self):
+        result= calc.add(10, 50)
+        self.assertEqual(calc.add(10, 50), 60)
 
 
 

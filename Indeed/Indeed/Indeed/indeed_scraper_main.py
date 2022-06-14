@@ -1,7 +1,5 @@
 
 import sys
-import threading
-
 from numpy import product
 from selenium import webdriver
 from bs4 import BeautifulSoup as bs
@@ -14,7 +12,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 import json 
 import pandas as pd
 import numpy as np
-
+import unittest
+import calc
 from io import StringIO
 import pandas as pd
 from time import sleep
@@ -26,9 +25,10 @@ uuid4 = uuid.uuid4()
 # job_containers = driver.find_elements(by=By.XPATH, value="//ul[@class='jobsearch-ResultsList']//div[@class='slider_container css-11g4k3a eu4oa1w0']")
 # # self.dataframe = pd.DataFrame(columns=["URL", "ID", "Title", "Company", 
 # list_of_all_jobs_details = []
-
+""" This class scrapes the website and files the details in a json file"""
 
 class Scraper:
+    """Using webdriver to automate the webpage"""
     def __init__(self) -> None:
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
         self.url = self.driver.get("https://uk.indeed.com/jobs?q=data%20engineer%20or%20data%20scientist&l=Greater%20London&vjk=f11971796d62ded9")
@@ -58,6 +58,7 @@ class Scraper:
         #         break
         
     def scrape(self):
+        """Assigning a new method to call another method"""
         # self.nevigate_page()
         # self.__get_job_details(self.job_containers)
         global job_indeed
@@ -66,10 +67,12 @@ class Scraper:
         # df = pd.DataFrame.from_dict(job_indeed)
         # print(df)
         # return job_indeed    
-    
+        """Saving the details in json file"""
         with open("Data_jobs.json", "w") as outfile:
             json.dump(job_indeed, outfile, indent=4)
     def nevigate_page(self) -> None:
+        """ This will accept all cookies """
+    
         self.accept_cookies = self.driver.find_element(by=By.XPATH, value= "//button[@id='onetrust-accept-btn-handler']")
         self.accept_cookies.click()
         self.third_element = self.driver.find_element(by=By.XPATH, value= "//div[@class='heading4 color-text-primary singleLineTitle tapItem-gutter']")
@@ -84,7 +87,7 @@ class Scraper:
     #     sleep(2)
     
     def get_job_details(self, job_containers):
-        
+        """ Scraping all the details related to the job post"""
         list_of_all_jobs_details = []
         for job_listing in job_containers:
             job_details_dictionary = dict()
@@ -107,6 +110,7 @@ class Scraper:
     # print(list_of_jobs)
     
     def download_image(self):
+        """ This will help to download the images/logos from the webpage"""
         image_url = ("https://uk.indeed.com/jobs?q=data%20engineer%20or%20data%20scientist&l=Greater%20London&vjk=f11971796d62ded9")
         image_content = self.driver.get(image_url)
         scraped_images = []
