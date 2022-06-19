@@ -36,9 +36,21 @@ class Scraper:
         # self.dataframe = pd.DataFrame(columns=["URL", "ID", "Title", "Company", "Location", "Salary", "UUID"])
         self.driver.maximize_window()
     def download_image(self):
-        image_url = ("https://uk.indeed.com/jobs?q=data%20engineer%20or%20data%20scientist&l=Greater%20London&vjk=f11971796d62ded9")
-        image_content = self.driver.get(image_url)
-        # soup = bs(image_content.text, 'html.parser')
+        # image_url = ("https://uk.indeed.com/jobs?q=data%20engineer%20or%20data%20scientist&l=Greater%20London&vjk=f11971796d62ded9")
+        image_content = self.driver.find_element(by=By.XPATH, value= "//div[@class= 'heading4 color-text-primary singleLineTitle tapItem-gutter'and 'href']")
+        image_content.click()
+        # for img in image_content:
+        #     img_dwd = img.get_attribute("src")
+        #     return img_dwd
+        # image_content.click()
+        image_download = self.driver.find_elements(by=By.XPATH, value="//img")
+        for i in image_download:
+            images = i.find_elements(by=By.TAG_NAME, value='img')
+            for img in images:
+                img_src = img.get_attribute("src")
+                print (img_src)
+        
+        # soup = bs(image_content, 'html.parser')
     
         # images = soup.find_all('img')
     

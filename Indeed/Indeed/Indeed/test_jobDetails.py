@@ -10,8 +10,8 @@ class TestJobDetails(unittest.TestCase):
   
     def test_jobScrape(self):
         try:
-            expected_value = 'href', 'id', 'text'
-            actual_value = self.scraper.get_job_details(job_containers='')
+            actual_value = len(self.scraper.get_job_details(job_containers=''))
+            expected_value = 15
             self.assertEqual(expected_value, actual_value)
         except AssertionError as msg:
             print(msg)

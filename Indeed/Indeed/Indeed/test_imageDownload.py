@@ -11,7 +11,7 @@ class TestImageLoad(unittest.TestCase):
     def test_downloadImage(self):
         try:
             expected_value = 'image'
-            actual_value = self.scraper.download_image()
+            actual_value = len(self.scraper.download_image())
             self.assertEqual(expected_value, actual_value)
         except AssertionError as msg:
             print(msg)
