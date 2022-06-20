@@ -72,14 +72,11 @@ class Scraper:
         with open("Data_jobs.json", "w") as outfile:
             json.dump(job_indeed, outfile, indent=4)
             
-        df = pd.DataFrame.from_dict(job_indeed)
-        file_name = r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed'
-        print(os.path.isfile(file_name))
-        with open(file_name, 'r', encoding='utf-8') as f:
-            lines = f.readlines()
-
-            print(lines)
-        df.to_csv(r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed', index=index, header=True)
+        # df = pd.DataFrame.from_dict(job_indeed)
+        # file_name = r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed'
+        # data_paths = [os.path.join(job_indeed, f) for f in os.listdir(job_indeed)]
+        # data_paths = [i for i in data_paths if os.path.isfile(i)]
+        # df.to_csv(r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed', index=index, header=True)
         
     def nevigate_page(self) -> None:
         """ This will accept all cookies """
