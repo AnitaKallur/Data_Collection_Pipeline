@@ -12,6 +12,9 @@ import os
 import sys
 from numpy import product
 import json 
+import psycopg2 as ps
+import sqlalchemy
+import postgres
 import pandas as pd
 import numpy as np
 from io import StringIO
@@ -71,9 +74,30 @@ class Scraper:
         """Saving the details in json file"""
         with open("Data_jobs.json", "w") as outfile:
             json.dump(job_indeed, outfile, indent=4)
-            
-        # df = pd.DataFrame.from_dict(job_indeed)
-        # file_name = r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed'
+        jobs_dataframe = {"Job_URL": job_details_dictionary["Job Link"],
+                          'ID':job_details_dictionary['Unique ID'], 
+                          'Job_Title': job_details_dictionary['Title'],
+                          'Name of the company': job_details_dictionary['Company Name'],
+                          'Location': job_details_dictionary['Company Location']}
+                            #  'Salary Package': {job_details_dictionary['Salary']}}
+        df = pd.DataFrame.from_dict([jobs_dataframe])
+        df.to_csv('job_indeed.csv', index=False)
+        df.to_csv = (r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed')
+        
+    def connect_to_db(self):
+        end_point = 'database-1.c3qa23m8pxdu.eu-west-2.rds.amazonaws.com'
+        dbname = 'my_database'
+        port = 5432
+        user_name = 'postgres'
+        password = 'Database123!'
+        
+        try: 
+            conn = ps.connect(host = end_point, database = dbname, user = user_name,password = password, port= port )
+        except ps.OperationalError as e:
+            raise e
+        else:
+            print('Connected!')
+            return conn
         # data_paths = [os.path.join(job_indeed, f) for f in os.listdir(job_indeed)]
         # data_paths = [i for i in data_paths if os.path.isfile(i)]
         # df.to_csv(r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed', index=index, header=True)
@@ -98,6 +122,7 @@ class Scraper:
         """ Scraping all the details related to the job post"""
         list_of_all_jobs_details = []
         for job_listing in job_containers:
+            global job_details_dictionary
             job_details_dictionary = dict()
             job_details_dictionary["Job Link"] = job_listing.find_element(by=By.XPATH, value=".//a").get_attribute('href')
             job_details_dictionary["Unique ID"] = job_listing.find_element(by=By.XPATH, value=".//a").get_attribute('id')
@@ -167,6 +192,7 @@ class Scraper:
         print(self.scrape())
         self.download_image()
         print(self.download_image())
+        self.connect_to_db()
         # self.scrape()
         # self.get_job_details()
         # self.indeed_full_data()
