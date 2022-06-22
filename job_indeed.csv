@@ -1,3 +1,7 @@
-Job_URL,ID,Job_Title,Name of the company,Location
-https://uk.indeed.com/company/Intent-HQ/jobs/Data-Scientist-6faead0a2569be8e?fccid=10cfd8368088acd6&vjs=3,job_6faead0a2569be8e,"new
-Data Scientist",Intent HQ,London SW1Y
+,0
+Job_URL,https://uk.indeed.com/company/Intent-HQ/jobs/Data-Scientist-6faead0a2569be8e?fccid=10cfd8368088acd6&vjs=3
+ID,job_6faead0a2569be8e
+Job_Title,"new
+Data Scientist"
+Name of the company,Intent HQ
+Location,London SW1Y

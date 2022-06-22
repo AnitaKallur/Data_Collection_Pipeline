@@ -24,6 +24,7 @@ import uuid
 uuid4 = uuid.uuid4()
 import boto3
 import plotly
+import sqlalchemy
 s3_client = boto3.client('s3')
 response = s3_client.upload_file('Data_jobs.json', 'databaseindeed', 'jobs_data.json')
 s3 = boto3.resource('s3')
@@ -67,38 +68,60 @@ class Scraper:
         # self.__get_job_details(self.job_containers)
         global job_indeed
         job_indeed= self.get_job_details(self.job_containers) 
-        print(job_indeed)
-        # df = pd.DataFrame.from_dict(job_indeed)
+        # print(job_indeed)
+        # df = pd.DataFrame.from_dict([jobs_dataframe])
         # print(df)
         # return job_indeed    
         """Saving the details in json file"""
         with open("Data_jobs.json", "w") as outfile:
             json.dump(job_indeed, outfile, indent=4)
-        jobs_dataframe = {"Job_URL": job_details_dictionary["Job Link"],
-                          'ID':job_details_dictionary['Unique ID'], 
-                          'Job_Title': job_details_dictionary['Title'],
-                          'Name of the company': job_details_dictionary['Company Name'],
-                          'Location': job_details_dictionary['Company Location']}
-                            #  'Salary Package': {job_details_dictionary['Salary']}}
-        df = pd.DataFrame.from_dict([jobs_dataframe])
-        df.to_csv('job_indeed.csv', index=False)
-        df.to_csv = (r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed')
+    # global jobs_dataframe
+    
+    
+    def get_dataframe(self):
+        self.job_data = jobs_dataframe
+        # df = pd.DataFrame.from_dict(jobs_dataframe,  orient='index')
+        # df.to_csv = ('jobs_data.csv')
+        # df.to_csv= ('/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed')
+        # print(df)
+        # print(self.job_data)
+        # df = pd.DataFrame.from_dict(self.job_data, orient='index')
         
+        # df.to_csv('jobs_dataframe.csv', index=True)
+        # df.to_csv = (r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed')
+        # print(df)
+        # return df
     def connect_to_db(self):
         end_point = 'database-1.c3qa23m8pxdu.eu-west-2.rds.amazonaws.com'
         dbname = 'my_database'
         port = 5432
         user_name = 'postgres'
         password = 'Database123!'
-        
+        conn = None
+        cur = None
         try: 
             conn = ps.connect(host = end_point, database = dbname, user = user_name,password = password, port= port )
-        except ps.OperationalError as e:
-            raise e
+                
+            cur = conn.cursor()
+            cur.execute('drop table if exists job_details.csv') 
+            # create_data = (r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed/Indeed/job_indeed.csv')
+            # cur.execute(create_data)
+            # conn.commit()
+                 
+        except ps.OperationalError as error:
+            raise error
+        
+            
         else:
             print('Connected!')
             return conn
-        # data_paths = [os.path.join(job_indeed, f) for f in os.listdir(job_indeed)]
+        finally:
+            if cur is not None:
+                cur.close()
+            if conn is not None:
+                conn.close()
+        
+        # data_paths = [os.path.join(jobs_dataframe, f) for f in os.listdir(jobs_dataframe)]
         # data_paths = [i for i in data_paths if os.path.isfile(i)]
         # df.to_csv(r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed', index=index, header=True)
         
@@ -138,13 +161,43 @@ class Scraper:
             # except:
             #     pass
             list_of_all_jobs_details.append(job_details_dictionary)
-      
+            global jobs_dataframe
+            jobs_dataframe = {"Job_URL": job_details_dictionary["Job Link"],
+                        'ID':job_details_dictionary['Unique ID'], 
+                        'Job_Title': job_details_dictionary['Title'],
+                        'Name_of_the_company': job_details_dictionary['Company Name'],
+                        'Location': job_details_dictionary['Company Location']}
+                    # 'Salary Package': job_details_dictionary['Salary']}
+            # print(jobs_dataframe)
+            # print(jobs_dataframe)
+            df = pd.DataFrame.from_dict(jobs_dataframe,  orient='index')
+            df.to_csv = ('jobs_data.csv')
+            df.to_csv= ('/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed')
+            print(df)
+            # print(list_of_all_jobs_details)
         return list_of_all_jobs_details
+        
+        
     
-    
+       
     # list_of_jobs = get_job_details(s)
     # print(list_of_jobs)
     
+    # def sql_table(self):
+    #     create table 
+    #     (Job_URL                sqlalchemy.VARCHAR
+    #      ID                     sqlalchemy.VARCHAR, 
+    #     Job_Title               sqlalchemy.VARCHAR,
+    #     Name_of_the_company     sqlalchemy.VARCHAR,
+    #     Company_Location        sqlalchemy.VARCHAR,
+    #     Salary_package          sqlalchemy.VARCHAR);
+        
+    #     replacements = { 'object' : 'varchar',
+    #                     'float64' : 'float',
+    #                     'int64' : 'int',
+    #                     'datetime64' : 'datestamp', 
+    #                     'timedelta64(ns)': 'varchar'
+    #                     }
     def download_image(self):
         """ This will help to download the images/logos from the webpage"""
         # image_url = ("https://uk.indeed.com/jobs?q=data%20engineer%20or%20data%20scientist&l=Greater%20London&vjk=f11971796d62ded9")
@@ -192,6 +245,8 @@ class Scraper:
         print(self.scrape())
         self.download_image()
         print(self.download_image())
+        self.get_dataframe()
+        # print(self.get_dataframe)
         self.connect_to_db()
         # self.scrape()
         # self.get_job_details()
