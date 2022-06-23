@@ -19,6 +19,7 @@ import pandas as pd
 import numpy as np
 from io import StringIO
 import pandas as pd
+from pandas import DataFrame
 from time import sleep
 import uuid
 uuid4 = uuid.uuid4()
@@ -31,6 +32,7 @@ s3 = boto3.resource('s3')
 my_bucket = s3.Bucket('databaseindeed')
 for file in my_bucket.objects.all():
     print(file.key)
+
 
 """ This class scrapes the website and files the details in a json file"""
 
@@ -67,10 +69,15 @@ class Scraper:
         # self.nevigate_page()
         # self.__get_job_details(self.job_containers)
         global job_indeed
+        job_indeed = dict()
         job_indeed= self.get_job_details(self.job_containers) 
         # print(job_indeed)
-        # df = pd.DataFrame.from_dict([jobs_dataframe])
+        df = pd.DataFrame.from_dict(job_indeed)
+        df.to_csv = ('df.csv')
+        df.to_csv= (r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/df.csv')
+        print(df)
         # print(df)
+        
         # return job_indeed    
         """Saving the details in json file"""
         with open("Data_jobs.json", "w") as outfile:
@@ -99,17 +106,60 @@ class Scraper:
         password = 'Database123!'
         conn = None
         cur = None
+        
         try: 
             conn = ps.connect(host = end_point, database = dbname, user = user_name,password = password, port= port )
                 
             cur = conn.cursor()
-            cur.execute('drop table if exists job_details.csv') 
-            # create_data = (r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed/Indeed/job_indeed.csv')
-            # cur.execute(create_data)
-            # conn.commit()
+            df1 = pd.read_csv('job_indeed.csv')
+            # file = "job_indeed.csv"
+            # clean_table_name = file.lower().replace(" ", "").replace("?", "").replace(" ", "_")
+            SQL_table= """create table job_indeed
+                (Job_URL                varchar,
+                ID                     varchar, 
+                Job_Title               varchar,
+                Name_of_the_company     varchar,
+                Company_Location        varchar,
+                Salary_package          varchar);"""
+            
+            replacements = """{ 'object' : 'varchar',
+                            'float64' : 'float',
+                            'int64' : 'int',
+                            'datetime64' : 'datestamp', 
+                            'timedelta64(ns)': 'varchar'
+                            }
+                """
+            # print(SQL_table)
+            
+            cur.execute("drop table if exists df.csv") 
+            
+            cur.execute("create table df (Job_URL varchar, ID varchar, Job_Title varchar, Name_of_the_company varchar, Company_Location varchar, Salary_package varchar)")
+            print('table created')
+            csv_files =[]
+            for file in os.listdir(os.getcwd()):
+                if file.endswith('.csv'):
+                    csv_files.append(file)
+                    # print(csv_files)
+            df = pd.DataFrame.from_dict(job_indeed)
+            df.to_csv = ('df.csv')
+            df.to_csv= (r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/df.csv')
+            my_file = open('df.csv', encoding='utf-8')
+            print('file opened in memory')
+            
+            SQL_STATEMENT = """
+            COPY df FROM STDIN WITH 
+            CSV
+            HEADER
+            DELIMITER AS ','
+            """
+            cur.copy_expert(sql=SQL_STATEMENT, file=my_file)
+            print('file copied to db')
+            create_data = (r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/df.csv')
+            cur.execute(create_data)
+            conn.commit()
                  
         except ps.OperationalError as error:
-            raise error
+            print(error)
         
             
         else:
@@ -147,11 +197,11 @@ class Scraper:
         for job_listing in job_containers:
             global job_details_dictionary
             job_details_dictionary = dict()
-            job_details_dictionary["Job Link"] = job_listing.find_element(by=By.XPATH, value=".//a").get_attribute('href')
-            job_details_dictionary["Unique ID"] = job_listing.find_element(by=By.XPATH, value=".//a").get_attribute('id')
+            job_details_dictionary["Job_Link"] = job_listing.find_element(by=By.XPATH, value=".//a").get_attribute('href')
+            job_details_dictionary["Unique_ID"] = job_listing.find_element(by=By.XPATH, value=".//a").get_attribute('id')
             job_details_dictionary["Title"] = job_listing.find_element(by=By.XPATH, value=".//h2").text
-            job_details_dictionary["Company Name"] = job_listing.find_element(by=By.XPATH, value=".//div/span[@class='companyName']").text
-            job_details_dictionary["Company Location"] = job_listing.find_element(by=By.XPATH, value=".//div[@class='companyLocation']").text
+            job_details_dictionary["Company_Name"] = job_listing.find_element(by=By.XPATH, value=".//div/span[@class='companyName']").text
+            job_details_dictionary["Company_Location"] = job_listing.find_element(by=By.XPATH, value=".//div[@class='companyLocation']").text
             try:
                 job_details_dictionary["Salary"] = job_listing.find_element(by=By.XPATH, value= ".//div[@class='metadata salary-snippet-container']").get_attribute('textContent')
             except:
@@ -162,19 +212,20 @@ class Scraper:
             #     pass
             list_of_all_jobs_details.append(job_details_dictionary)
             global jobs_dataframe
-            jobs_dataframe = {"Job_URL": job_details_dictionary["Job Link"],
-                        'ID':job_details_dictionary['Unique ID'], 
+            jobs_dataframe = dict()
+            jobs_dataframe = {"Job_URL": job_details_dictionary["Job_Link"],
+                        'ID':job_details_dictionary['Unique_ID'], 
                         'Job_Title': job_details_dictionary['Title'],
-                        'Name_of_the_company': job_details_dictionary['Company Name'],
-                        'Location': job_details_dictionary['Company Location']}
+                        'Name_of_the_company': job_details_dictionary['Company_Name'],
+                        'Location': job_details_dictionary['Company_Location']}
                     # 'Salary Package': job_details_dictionary['Salary']}
             # print(jobs_dataframe)
             # print(jobs_dataframe)
-            df = pd.DataFrame.from_dict(jobs_dataframe,  orient='index')
-            df.to_csv = ('jobs_data.csv')
-            df.to_csv= ('/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed')
-            print(df)
-            # print(list_of_all_jobs_details)
+            # df = pd.DataFrame.from_dict(jobs_dataframe,  orient='index')
+            # df.to_csv = ('df.csv')
+            # df.to_csv= ('/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed')
+            # print(df)
+            # # print(list_of_all_jobs_details)
         return list_of_all_jobs_details
         
         

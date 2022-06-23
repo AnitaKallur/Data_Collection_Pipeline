@@ -1,112 +1,114 @@
 [
     {
-        "Job Link": "https://uk.indeed.com/rc/clk?jk=58d9ca71008f05a9&fccid=10b9f0a386e74039&vjs=3",
-        "Unique ID": "job_58d9ca71008f05a9",
+        "Job_Link": "https://uk.indeed.com/rc/clk?jk=58d9ca71008f05a9&fccid=10b9f0a386e74039&vjs=3",
+        "Unique_ID": "job_58d9ca71008f05a9",
         "Title": "new\nData Scientist",
-        "Company Name": "Ambassador Theatre Group",
-        "Company Location": "London",
+        "Company_Name": "Ambassador Theatre Group",
+        "Company_Location": "London",
         "Salary": "\u00a350,000 a year"
     },
     {
-        "Job Link": "https://uk.indeed.com/rc/clk?jk=6777bedf831aaee5&fccid=231c81d7782c6a21&vjs=3",
-        "Unique ID": "job_6777bedf831aaee5",
+        "Job_Link": "https://uk.indeed.com/pagead/clk?mo=r&ad=-6NYlbfkN0C4nje_eUcJygKnWiKpJdNC2fyftdmI8CPysYuvSAU4r0SfJJTsc2-nUR5kvp8aIyVrXPmsqqwcoYi32Q9tzP10ndhQt5-5i2_lMdWv68ISGHMqrtiKEh7LjZZNx4rHCirEfQAlF298683u5tM7VJUknFGmKaVeUiAydYC5i84HGGmPFNZkSIXNI-ePSV8F3L1GXDrfNnJQpdltrsjVdbiRU6uvUXj0wnPHSFI6YuZUnCWTtRUZKhJZ0N3weW8oco0FS3trLHrCpeUKOFDomjF0fuH_T4wVDW3TzASgN4Qu-ykmS5oUlFX95m0eCRXQgEJD2IFPymrWy6xL3pi82n02NCrPJqiIfo67SfpcZFvzq-lD8jKJGMFcFsEU21VdcgA-yIBT3G154eu9TyRXcHPIoGmpStAWfyWfU1vYQkbW60sScFoSjf-cCQf2MRLHoPWxvptGgBqwgGjND3rwSq2lq5MPFyjKtX9Zzyb6Hiq6x4ayiWI8z50GxevpHqCL_paSAdT07NsaYx_ZlLLjsz4p&xkcb=SoAo-_M3cJOLT1gI-r0LbzkdCdPP&p=1&fvj=1&vjs=3",
+        "Unique_ID": "sj_a4a7d15d07402c8f",
+        "Title": "Scala Data Engineer",
+        "Company_Name": "Tata Consultancy Services (TCS)",
+        "Company_Location": "London"
+    },
+    {
+        "Job_Link": "https://uk.indeed.com/pagead/clk?mo=r&ad=-6NYlbfkN0BvKrLyj5gPmtZO9T8euul8TCxuuKNOtzRJOomxnwSEodTz2Bc-sPZlFdpId5_kItRgbc3Hl9sM9XadBBd1PTetkISuoqat4vcn8fbq6qCgjpvS6Kx_ZVLM7xVzuzwz_7cRZGEQyQhOauA0IwN563lgLnLLc5yu3z3TqdWJEz-GtvaDrqa-L54hvz4H9CstGu9xNfvT7UoOwaYoBGpX_yJK3-_xXNX9Ti15ZTSUVImFEt4qlOTggPYDQoPcwnLcKmVIkj2s9g8dh0rolvBYotrB261f7KHWZrr6aJWkafXFeAsiSlKp9mvru1gfbJp-jVWGmE6aNHi1Dz6nvh5QD2usMU85DSFLtR2n6qfJHVmi-2UtdInXHYw22UzFaxcCwlZZ5NbpSD2HHfFZHFj2THKtE0GOhS3AFaZsC3JRBQX2AHRLyVnzh1I0BdS_ar8EsV_4Z9jXR4yAxa27Z4rthsNkfHozuw8ceW__BRt8LCFpbZZ2uk5nJ8FxFiZbuEkLp3EyCiT2Vdb2oOdNWj6tILWEMz4kO7asLzRNBCcJe0FA2UGKP2rvvKlAH10dNjJkxLsFV7ZSnmchm-If73zKUNrEniHw6D9INGXfxUld4L_aEz21GB9qRxacIm_QGwcCbph2F2F0ni_U4lJQY2_Zx3nUcuMJQsuRy_HW6YWm-COLD60QcYALzAZpfZAlzjdvmORM_YxBQo0eSf5y-edfJl9yJPI4Z56EiWr0oDH0uSQqmK_SFvq8tUdeQalGm0NNvyvN5LmTkOxajoL2CAbBFKMIyi1g7oaURh1RxNZJIuVweXKxpyKdwQR2EMSmg6v0hYy4JvE44mct6wxcLGYB0xOuFeGoq5POUmMM4DRSkgFWl7V90LOdzthdvUoHTdD9mBSvqLPCYW-xMVUhaA-GwFIEndwYrUJi1oVc0FSi_xm-cnarqMYfxOT-p9Q5-3284eHOXquTieoB8sVOQPnyBifjF9-z-jEpYrZOWzc3nKoDwFFzuH2OWszUXay18iR7rkb8xCfqJtUCNqFaM3dLcGWY&xkcb=SoAS-_M3cJOLT0AI-r0KbzkdCdPP&p=2&fvj=0&vjs=3",
+        "Unique_ID": "sj_e7bb5fb9bccc1983",
+        "Title": "Apple Growth Marketing- Data Scientist",
+        "Company_Name": "Apple",
+        "Company_Location": "London"
+    },
+    {
+        "Job_Link": "https://uk.indeed.com/rc/clk?jk=0597d27c69ee0a92&fccid=167aa4ca2fe7d8e6&vjs=3",
+        "Unique_ID": "job_0597d27c69ee0a92",
+        "Title": "new\nData Scientist, Forecasting",
+        "Company_Name": "Shell",
+        "Company_Location": "London"
+    },
+    {
+        "Job_Link": "https://uk.indeed.com/rc/clk?jk=6777bedf831aaee5&fccid=231c81d7782c6a21&vjs=3",
+        "Unique_ID": "job_6777bedf831aaee5",
         "Title": "Data Scientist",
-        "Company Name": "MI5",
-        "Company Location": "London",
+        "Company_Name": "MI5",
+        "Company_Location": "London",
         "Salary": "\u00a354,214 a year"
     },
     {
-        "Job Link": "https://uk.indeed.com/rc/clk?jk=2837b95cac0e58bb&fccid=fae563c40212ccaf&vjs=3",
-        "Unique ID": "job_2837b95cac0e58bb",
-        "Title": "new\nData Engineer",
-        "Company Name": "Moneybox",
-        "Company Location": "London"
+        "Job_Link": "https://uk.indeed.com/pagead/clk?mo=r&ad=-6NYlbfkN0DG4ntHtB_rMsnfhgmnSvK2brktLme1L4SiDeJjQ-izrVOLqRJ5-yjEjDkpeVLIPLL8Mf5PF1_B9vmYAwZggcaAeNlODRZVb7JWvB1g0Yei4cNmrHuKZmzCyOocSXSknn9E2zcn-BzN_j0KB19nJI2jrLhDiVHteLnqmfeomznOqkd5xzPxWjOlnPMxeFoP0uWACe4lUdRb5XNdrQTUEoKj4JzVhhrcDmrp012KA2xCsqGHuoQR8bsJyj_gMg_Tz69RErfwtuje3I0RkFppB3boD4bJv-D_Ys60A2xU8peizbNRgxqMEtoZyis38c5B7ZG-az7ulcJVF9zJlcFj1Tik-9Y9AG5Mas1V44mTdH4_ps35LjOpSnz0Ck7OyBlzaUGSfvNE-MCGTLVQ6ZIYssPIvUYu70RmcdqBttmttfj0yiv736jrHVnDM4ue3x3gQbEglY_1256MybyPe-G2ap5UTS0cgq7uvrREmASU0o4jwU0Fb0LdahApOogqAeC9lqSX6_uS6e9e5Ibt6MRJlbrM-oXKedT8j7nmtSu5WmkRHqbEChBWzSqdgg_MJdar8kqYWgY2s80EFM4KK6YPozabA6dYDUZxuGHkDKcwwmuxknDasqUybcLVPXYTMbGzZ-hiDmZ1pz3UdgKGyjcbBaxrGYOrnDaiTMICdll-kakdk10rEfCStITTuYqhe_dZPOUbK4Z41tt0WCKG16fmYwtmaLOjo6H-7D5yya6Gc32TyATkaxz0gI9JI5LsB67fL8ytCwW5JhE-igUnlUl3N4_TvHApfQCxJVRfuC9J6PgO-7XwfVYUehIeKEhqAMVF9svkkbKF_KnofLCvKzQVDCevDsxHGBmcV56pIhSwqkWUlB6AZcG5oiUEJ1zwulshlLbjubDMzmxleGi3RxQk2cZ6xKhO8RHJBZfC-iLuSaZmzmAsGO716E0Bw4rmTSG2Q7eiggFTiH2KLV4aGtKdNt_y5KCNPMXYbv_QN-DXUrmPwXfSwdw20PZ4Adl3wxtXd7c=&xkcb=SoDj-_M3cJOLT0gI-r0LbzkdCdPP&p=5&fvj=0&vjs=3",
+        "Unique_ID": "sj_15911310d9546fd1",
+        "Title": "Data Engineer",
+        "Company_Name": "Aspect Capital",
+        "Company_Location": "Remote in London",
+        "Salary": "\u00a360,000 - \u00a380,000 a year"
     },
     {
-        "Job Link": "https://uk.indeed.com/rc/clk?jk=d9af18696a729238&fccid=396f5ba534ee585d&vjs=3",
-        "Unique ID": "job_d9af18696a729238",
-        "Title": "new\nData Scientist",
-        "Company Name": "Burberry",
-        "Company Location": "London"
-    },
-    {
-        "Job Link": "https://uk.indeed.com/rc/clk?jk=4b91fb225034dbcd&fccid=fe2d21eef233e94a&vjs=3",
-        "Unique ID": "job_4b91fb225034dbcd",
+        "Job_Link": "https://uk.indeed.com/rc/clk?jk=4b91fb225034dbcd&fccid=fe2d21eef233e94a&vjs=3",
+        "Unique_ID": "job_4b91fb225034dbcd",
         "Title": "Data Scientist - Returnship Program",
-        "Company Name": "Amazon UK Services Ltd.",
-        "Company Location": "London"
+        "Company_Name": "Amazon UK Services Ltd.",
+        "Company_Location": "London"
     },
     {
-        "Job Link": "https://uk.indeed.com/rc/clk?jk=fca6029dab518d92&fccid=6423597f1cdb7b53&vjs=3",
-        "Unique ID": "job_fca6029dab518d92",
+        "Job_Link": "https://uk.indeed.com/rc/clk?jk=d9af18696a729238&fccid=396f5ba534ee585d&vjs=3",
+        "Unique_ID": "job_d9af18696a729238",
+        "Title": "new\nData Scientist",
+        "Company_Name": "Burberry",
+        "Company_Location": "London"
+    },
+    {
+        "Job_Link": "https://uk.indeed.com/rc/clk?jk=fca6029dab518d92&fccid=6423597f1cdb7b53&vjs=3",
+        "Unique_ID": "job_fca6029dab518d92",
         "Title": "new\nSenior Data Scientist",
-        "Company Name": "Lloyds Banking Group",
-        "Company Location": "London",
+        "Company_Name": "Lloyds Banking Group",
+        "Company_Location": "London",
         "Salary": "\u00a365,320 - \u00a381,650 a year"
     },
     {
-        "Job Link": "https://uk.indeed.com/company/Intent-HQ/jobs/Data-Scientist-6faead0a2569be8e?fccid=10cfd8368088acd6&vjs=3",
-        "Unique ID": "job_6faead0a2569be8e",
-        "Title": "new\nData Scientist",
-        "Company Name": "Intent HQ",
-        "Company Location": "London SW1Y"
+        "Job_Link": "https://uk.indeed.com/rc/clk?jk=2837b95cac0e58bb&fccid=fae563c40212ccaf&vjs=3",
+        "Unique_ID": "job_2837b95cac0e58bb",
+        "Title": "new\nData Engineer",
+        "Company_Name": "Moneybox",
+        "Company_Location": "London",
+        "Salary": "\u00a3200 a week"
     },
     {
-        "Job Link": "https://uk.indeed.com/rc/clk?jk=48e9b57d22cd50c0&fccid=a215cb2b2520e59a&vjs=3",
-        "Unique ID": "job_48e9b57d22cd50c0",
+        "Job_Link": "https://uk.indeed.com/rc/clk?jk=3238f5d2df20c5ac&fccid=e290923a98afee94&vjs=3",
+        "Unique_ID": "job_3238f5d2df20c5ac",
+        "Title": "new\nData Science Internships",
+        "Company_Name": "ICF",
+        "Company_Location": "Hybrid remote in London"
+    },
+    {
+        "Job_Link": "https://uk.indeed.com/rc/clk?jk=c7d1b4014f4ecedc&fccid=19d1d48be8ab494a&vjs=3",
+        "Unique_ID": "job_c7d1b4014f4ecedc",
+        "Title": "new\nSenior Data Scientist",
+        "Company_Name": "Data Idols",
+        "Company_Location": "London",
+        "Salary": "\u00a350,000 - \u00a360,000 a year"
+    },
+    {
+        "Job_Link": "https://uk.indeed.com/rc/clk?jk=48e9b57d22cd50c0&fccid=a215cb2b2520e59a&vjs=3",
+        "Unique_ID": "job_48e9b57d22cd50c0",
         "Title": "Data Scientist",
-        "Company Name": "Harrods",
-        "Company Location": "Hammersmith"
+        "Company_Name": "Harrods",
+        "Company_Location": "Hammersmith"
     },
     {
-        "Job Link": "https://uk.indeed.com/company/Railpen/jobs/Senior-Data-Engineer-3de68cfec3c3621f?fccid=b363b3e9cf284444&vjs=3",
-        "Unique ID": "job_3de68cfec3c3621f",
-        "Title": "new\nSenior Data Engineer",
-        "Company Name": "Railpen",
-        "Company Location": "London",
-        "Salary": "Up to \u00a395,000 a year"
-    },
-    {
-        "Job Link": "https://uk.indeed.com/company/Link-Humans/jobs/Data-Scientist-8894534664d79a78?fccid=2f73ea5de6c1c2b5&vjs=3",
-        "Unique ID": "job_8894534664d79a78",
+        "Job_Link": "https://uk.indeed.com/company/Link-Humans/jobs/Data-Scientist-8894534664d79a78?fccid=2f73ea5de6c1c2b5&vjs=3",
+        "Unique_ID": "job_8894534664d79a78",
         "Title": "new\nData Scientist",
-        "Company Name": "Link Humans",
-        "Company Location": "Remote in London",
+        "Company_Name": "Link Humans",
+        "Company_Location": "Remote in London",
         "Salary": "\u00a325,000 - \u00a330,000 a year"
     },
     {
-        "Job Link": "https://uk.indeed.com/rc/clk?jk=d73533ce49375a01&fccid=ba07516c418dda52&vjs=3",
-        "Unique ID": "job_d73533ce49375a01",
-        "Title": "Data Engineer",
-        "Company Name": "Facebook App",
-        "Company Location": "London"
-    },
-    {
-        "Job Link": "https://uk.indeed.com/rc/clk?jk=fbe6613a6bcc4255&fccid=da3c7fed78dd1607&vjs=3",
-        "Unique ID": "job_fbe6613a6bcc4255",
+        "Job_Link": "https://uk.indeed.com/rc/clk?jk=fbe6613a6bcc4255&fccid=da3c7fed78dd1607&vjs=3",
+        "Unique_ID": "job_fbe6613a6bcc4255",
         "Title": "Data Scientist Intern",
-        "Company Name": "Samsung Electronics",
-        "Company Location": "Hybrid remote in Staines-upon-Thames"
-    },
-    {
-        "Job Link": "https://uk.indeed.com/rc/clk?jk=a2dad7ed21665acb&fccid=dd616958bd9ddc12&vjs=3",
-        "Unique ID": "job_a2dad7ed21665acb",
-        "Title": "new\nData Centre Engineer - London",
-        "Company Name": "Woolf Group",
-        "Company Location": "London\n+1 location"
-    },
-    {
-        "Job Link": "https://uk.indeed.com/rc/clk?jk=6066ac17b20a5a97&fccid=10b5c722d846df43&vjs=3",
-        "Unique ID": "job_6066ac17b20a5a97",
-        "Title": "Data Scientist",
-        "Company Name": "MasterCard",
-        "Company Location": "Hybrid remote in London"
-    },
-    {
-        "Job Link": "https://uk.indeed.com/rc/clk?jk=900d08567cf82984&fccid=fc0eeff012676923&vjs=3",
-        "Unique ID": "job_900d08567cf82984",
-        "Title": "new\nData Scientist",
-        "Company Name": "KANTAR",
-        "Company Location": "London"
+        "Company_Name": "Samsung Electronics",
+        "Company_Location": "Hybrid remote in Staines-upon-Thames"
     }
 ]
