@@ -72,10 +72,10 @@ class Scraper:
         job_indeed = dict()
         job_indeed= self.get_job_details(self.job_containers) 
         # print(job_indeed)
-        df = pd.DataFrame.from_dict(job_indeed)
-        df.to_csv = ('df.csv')
-        df.to_csv= (r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/df.csv')
-        print(df)
+        # df = pd.DataFrame.from_dict(job_indeed)
+        # df.to_csv = ('df.csv')
+        # df.to_csv= (r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/df.csv')
+        # print(df)
         # print(df)
         
         # return job_indeed    
@@ -87,6 +87,11 @@ class Scraper:
     
     def get_dataframe(self):
         self.job_data = jobs_dataframe
+        df = pd.DataFrame.from_dict(job_indeed)
+        df=df.loc[:, ~df.columns.str.contains('^Unnamed')]
+        df.to_csv = ('dataframe_indeed.csv')
+        df.to_csv= (r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/dataframe_indeed.csv')
+        print(df)
         # df = pd.DataFrame.from_dict(jobs_dataframe,  orient='index')
         # df.to_csv = ('jobs_data.csv')
         # df.to_csv= ('/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed')
@@ -111,12 +116,12 @@ class Scraper:
             conn = ps.connect(host = end_point, database = dbname, user = user_name,password = password, port= port )
                 
             cur = conn.cursor()
-            df1 = pd.read_csv('job_indeed.csv')
+            # df1 = pd.read_csv('job_indeed.csv')
             # file = "job_indeed.csv"
             # clean_table_name = file.lower().replace(" ", "").replace("?", "").replace(" ", "_")
-            SQL_table= """create table job_indeed
+            SQL_table= """create table dataframe_indeed
                 (Job_URL                varchar,
-                ID                     varchar, 
+                Unique_ID               varchar, 
                 Job_Title               varchar,
                 Name_of_the_company     varchar,
                 Company_Location        varchar,
@@ -131,32 +136,31 @@ class Scraper:
                 """
             # print(SQL_table)
             
-            cur.execute("drop table if exists df.csv") 
+            cur.execute("drop table if exists dataframe_indeed.csv") 
             
-            cur.execute("create table df (Job_URL varchar, ID varchar, Job_Title varchar, Name_of_the_company varchar, Company_Location varchar, Salary_package varchar)")
+            cur.execute("create table dataframe_indeed (Job_URL varchar, ID varchar, Job_Title varchar, Name_of_the_company varchar, Company_Location varchar, Salary_package varchar)")
             print('table created')
-            csv_files =[]
-            for file in os.listdir(os.getcwd()):
-                if file.endswith('.csv'):
-                    csv_files.append(file)
+            # csv_files =[]
+            # for file in os.listdir(os.getcwd()):
+            #     if file.endswith('.csv'):
+            #         csv_files.append(file)
                     # print(csv_files)
-            df = pd.DataFrame.from_dict(job_indeed)
-            df.to_csv = ('df.csv')
-            df.to_csv= (r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/df.csv')
-            my_file = open('df.csv', encoding='utf-8')
-            print('file opened in memory')
             
-            SQL_STATEMENT = """
-            COPY df FROM STDIN WITH 
-            CSV
-            HEADER
-            DELIMITER AS ','
-            """
-            cur.copy_expert(sql=SQL_STATEMENT, file=my_file)
-            print('file copied to db')
-            create_data = (r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/df.csv')
-            cur.execute(create_data)
-            conn.commit()
+            # my_file = open('dataframe_indeed.csv', encoding='utf-8')
+            # print('file opened in memory')
+            
+            # SQL_STATEMENT = """
+            # COPY df FROM STDIN WITH 
+            # CSV
+            # HEADER
+            # DELIMITER AS ','
+            # """
+            
+            # cur.copy_expert(sql=SQL_STATEMENT, file=my_file)
+            # print('file copied to db')
+            # create_data = (r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/df.csv')
+            # cur.execute(create_data)
+            # conn.commit()
                  
         except ps.OperationalError as error:
             print(error)
