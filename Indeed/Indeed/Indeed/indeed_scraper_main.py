@@ -1,5 +1,6 @@
 from operator import index
 from urllib import response
+from matplotlib.pyplot import axis
 from selenium import webdriver
 from bs4 import BeautifulSoup as bs
 from selenium.webdriver.common.keys import Keys
@@ -26,12 +27,9 @@ uuid4 = uuid.uuid4()
 import boto3
 import plotly
 import sqlalchemy
-s3_client = boto3.client('s3')
-response = s3_client.upload_file('Data_jobs.json', 'databaseindeed', 'jobs_data.json')
-s3 = boto3.resource('s3')
-my_bucket = s3.Bucket('databaseindeed')
-for file in my_bucket.objects.all():
-    print(file.key)
+from sqlalchemy import create_engine
+from sqlalchemy import inspect
+
 
 
 """ This class scrapes the website and files the details in a json file"""
@@ -68,88 +66,130 @@ class Scraper:
         """Assigning a new method to call another method"""
         # self.nevigate_page()
         # self.__get_job_details(self.job_containers)
-        global job_indeed
-        job_indeed = dict()
-        job_indeed= self.get_job_details(self.job_containers) 
-        # print(job_indeed)
-        # df = pd.DataFrame.from_dict(job_indeed)
-        # df.to_csv = ('df.csv')
-        # df.to_csv= (r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/df.csv')
-        # print(df)
-        # print(df)
+        job_indeed= self.get_job_details(self.job_containers)
+        save_path = '/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline'
+        if not os.path.exists(f'{save_path}/Indeed_Dataframe'):
+                os.makedirs(f'{save_path}/Indeed_Dataframe')
+
+        with open(f'{save_path}/Indeed_Dataframe/Data_jobs.json', 'w+') as fp:
+            json.dump(job_indeed, fp,  indent=4)
+        global df
+        df = pd.DataFrame.from_dict(job_indeed) 
+        df.to_csv(r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/dataframe_indeed_jobs.csv', 
+        index = False, header=True)
         
-        # return job_indeed    
-        """Saving the details in json file"""
-        with open("Data_jobs.json", "w") as outfile:
-            json.dump(job_indeed, outfile, indent=4)
-    # global jobs_dataframe
-    
-    
-    def get_dataframe(self):
-        df = pd.DataFrame.from_dict(job_indeed)
-        df=df.loc[:, ~df.columns.str.contains('^Unnamed')]
-        df.to_csv = ('dataframe_indeed_jobs.csv')
-        # df.to_csv= ('dataframe_indeed_jobs.csv', '/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline')
-        print(f"data created: ", df.to_csv)
-        # df = pd.DataFrame.from_dict(jobs_dataframe,  orient='index')
-        # df.to_csv = ('jobs_data.csv')
-        # df.to_csv= ('/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed')
-        # print(df)
-        # print(self.job_data)
-        # df = pd.DataFrame.from_dict(self.job_data, orient='index')
-        
-        # df.to_csv('jobs_dataframe.csv', index=True)
-        # df.to_csv = (r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed')
-        # print(df)
-        # return df
+
+        if os.path.exists(f'{save_path}/Indeed_Dataframe/dataframe_indeed_jobs.csv') and os.path.exists(f'{save_path}/Indeed_Dataframe/Data_jobs.json'):
+            self.saving_data = True
+            return self.saving_data, save_path
+       
     def connect_to_db(self):
-        end_point = 'database-1.c3qa23m8pxdu.eu-west-2.rds.amazonaws.com'
-        dbname = 'my_database'
-        port = 5432
-        user_name = 'postgres'
-        password = 'Database123!'
-        conn = None
-        cur = None
+        DATABASE_TYPE = 'postgresql'
+        DBAPI = 'psycopg2'
+        HOST = 'localhost'
+        USER = 'postgres'
+        PASSWORD = 'Database123!'
+        DATABASE = 'postgres'
+        PORT = 5432
+        engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
+        engine.connect()
+        # inspector = inspect(engine)
+        # inspector.get_table_names()
+        engine.execute('''SELECT * FROM dataframe_jobs''').fetchall()
+        jobs = pd.read_sql_table('dataframe_jobs', engine)
+        print(jobs)
+    # def aws_upload(self, df):
+        df.to_json('/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Data_jobs.json', orient='records', lines=True )
         
-        try: 
-            conn = ps.connect(host = end_point, database = dbname, user = user_name,password = password, port= port )
-                
-            cur = conn.cursor()
-            # df1 = pd.read_csv('job_indeed.csv')
-            # file = "job_indeed.csv"
-            # clean_table_name = file.lower().replace(" ", "").replace("?", "").replace(" ", "_")
-            SQL_table= """create table dataframe_indeed
-                (Job_URL                varchar,
-                Unique_ID               varchar, 
-                Job_Title               varchar,
-                Name_of_the_company     varchar,
-                Company_Location        varchar,
-                Salary_package          varchar);"""
+        #send df back to Aws RDS
+        df.to_sql("dataframe_jobs", engine, if_exists="replace")
+
+    
+        #upload json S3 bucket     
+        s3_client = boto3.client('s3')
+        response = s3_client.upload_file('Data_jobs.json', 'databaseindeed', 'jobs_data.json')
+        s3 = boto3.resource('s3')
+        my_bucket = s3.Bucket('databaseindeed')
+        for file in my_bucket.objects.all():
+            print(file.key)
+        
+        
+        # s3_name=str('data_jobs.json')
+        # s3_client =boto3.client('s3')
+        # s3_client.upload_file('/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/data_jobs.json', 'dataframe_jobs', s3_name)
+                   
+        #remove json files from the system
+        os.remove('/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Data_jobs.json')
+        df.to_json
+        # print(jobs)
+        # engine = create_engine("{type of database}+{DBAPI}://{username}:{password}@{host}:{port}/{database_name}")
+        # end_point = 'database-1.c3qa23m8pxdu.eu-west-2.rds.amazonaws.com'
+        # HOST = 'localhost'
+        # HOST = 'database-1.c3qa23m8pxdu.eu-west-2.rds.amazonaws.com'
+        # dbname = 'my_database'
+        
+        # port = 5432
+        # user_name = 'postgres'
+        # DATABASE = 'postgres'
+        # # DATABASE = 'my_database'
+        # password = 'Database123!'
+        # # conn = None
+        # # cur = None
+        
+        
+        # try: 
+        #     with ps.connect(host = HOST, database = DATABASE, user = user_name,password = password, port= port) as conn :
+        #         with conn.cursor() as cur:
+        #             # sleep(5)
+        #             cur.execute("""SELECT * FROM dataframe_jobs
+        #                         """)
+        #             # sleep(5)
+        #     # print(type(cur))
+        #     records = cur.fetchall()
+        #     # sleep(5)
+        #     print(records)
+        # except ps.ProgrammingError as exc:
+        #     print (f"programming error: ", exc)
+        #     conn.rollback()
+        # except ps.InterfaceError as exc:
+        #     print (f"Interface error: ", exc)
+        #     conn = ps.connect(host = HOST, database = DATABASE, user = user_name,password = password, port= port)
+        # cur = conn.cursor()
+            # # df1 = pd.read_csv('job_indeed.csv')
+            # # file = "job_indeed.csv"
+            # # clean_table_name = file.lower().replace(" ", "").replace("?", "").replace(" ", "_")
+            # SQL_table= """create table dataframe_indeed
+            #     (Job_URL                varchar,
+            #     Unique_ID               varchar, 
+            #     Job_Title               varchar,
+            #     Name_of_the_company     varchar,
+            #     Company_Location        varchar,
+            #     Salary_package          varchar);"""
             
-            replacements = """{ 'object' : 'varchar',
-                            'float64' : 'float',
-                            'int64' : 'int',
-                            'datetime64' : 'datestamp', 
-                            'timedelta64(ns)': 'varchar'
-                            }
-                """
-            # print(SQL_table)
+            # replacements = """{ 'object' : 'varchar',
+            #                 'float64' : 'float',
+            #                 'int64' : 'int',
+            #                 'datetime64' : 'datestamp', 
+            #                 'timedelta64(ns)': 'varchar'
+            #                 }
+            #     """
+            # # print(SQL_table)
             
-            cur.execute("drop table if exists dataframe_indeed.csv") 
+            # cur.execute("drop table if exists dataframe_indeed.csv") 
             
-            cur.execute("create table dataframe_indeed (Job_URL varchar, ID varchar, Job_Title varchar, Name_of_the_company varchar, Company_Location varchar, Salary_package varchar)")
-            print('table created')
+            # cur.execute("create table dataframe_indeed (Job_URL varchar, ID varchar, Job_Title varchar, Name_of_the_company varchar, Company_Location varchar, Salary_package varchar)")
+            # print('table created')
             # csv_files =[]
             # for file in os.listdir(os.getcwd()):
             #     if file.endswith('.csv'):
             #         csv_files.append(file)
-                    # print(csv_files)
+            #         print(csv_files)
             
-            # my_file = open('dataframe_indeed.csv', encoding='utf-8')
+            # my_file = open('dataframe_indeed_jobs.csv', encoding='utf-8')
             # print('file opened in memory')
             
             # SQL_STATEMENT = """
-            # COPY df FROM STDIN WITH 
+            # COPY dataframe_jobs FROM STDIN WITH 
             # CSV
             # HEADER
             # DELIMITER AS ','
@@ -157,22 +197,22 @@ class Scraper:
             
             # cur.copy_expert(sql=SQL_STATEMENT, file=my_file)
             # print('file copied to db')
-            # create_data = (r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/df.csv')
+            # create_data = (r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/dataframe_indeed_jobs.csv')
             # cur.execute(create_data)
-            # conn.commit()
+            # ps.connect.commit()
                  
-        except ps.OperationalError as error:
-            print(error)
+        # except ps.OperationalError as error:
+        #     print(error)
         
             
-        else:
-            print('Connected!')
-            return conn
-        finally:
-            if cur is not None:
-                cur.close()
-            if conn is not None:
-                conn.close()
+        # else:
+        #     print('Connected!')
+        #     return ps.connect
+        # finally:
+        #     if cur is not None:
+        #         cur.close()
+            # if ps.conn is not None:
+            #     ps.conn.close()
         
         # data_paths = [os.path.join(jobs_dataframe, f) for f in os.listdir(jobs_dataframe)]
         # data_paths = [i for i in data_paths if os.path.isfile(i)]
@@ -214,44 +254,9 @@ class Scraper:
             # except:
             #     pass
             list_of_all_jobs_details.append(job_details_dictionary)
-            global jobs_dataframe
-            jobs_dataframe = dict()
-            jobs_dataframe = {"Job_URL": job_details_dictionary["Job_Link"],
-                        'ID':job_details_dictionary['Unique_ID'], 
-                        'Job_Title': job_details_dictionary['Title'],
-                        'Name_of_the_company': job_details_dictionary['Company_Name'],
-                        'Location': job_details_dictionary['Company_Location']}
-                        # 'Salary Package': job_details_dictionary['Salary_Package']}
-            # print(jobs_dataframe)
-            # print(jobs_dataframe)
-            # df = pd.DataFrame.from_dict(jobs_dataframe, orient='index', columns=['Job_Link', 'Unique_ID', 'Job_Title', 'Comapany_Name', 'Company_Location'])
-            # df.to_csv = ('data_frame.csv')
-            # df.to_csv= ('/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed')
-            # print(df)
-            # # print(list_of_all_jobs_details)
         return list_of_all_jobs_details
         
-        
-    
-       
-    # list_of_jobs = get_job_details(s)
-    # print(list_of_jobs)
-    
-    # def sql_table(self):
-    #     create table 
-    #     (Job_URL                sqlalchemy.VARCHAR
-    #      ID                     sqlalchemy.VARCHAR, 
-    #     Job_Title               sqlalchemy.VARCHAR,
-    #     Name_of_the_company     sqlalchemy.VARCHAR,
-    #     Company_Location        sqlalchemy.VARCHAR,
-    #     Salary_package          sqlalchemy.VARCHAR);
-        
-    #     replacements = { 'object' : 'varchar',
-    #                     'float64' : 'float',
-    #                     'int64' : 'int',
-    #                     'datetime64' : 'datestamp', 
-    #                     'timedelta64(ns)': 'varchar'
-    #                     }
+ 
     def download_image(self):
         """ This will help to download the images/logos from the webpage"""
         # image_url = ("https://uk.indeed.com/jobs?q=data%20engineer%20or%20data%20scientist&l=Greater%20London&vjk=f11971796d62ded9")
@@ -290,18 +295,20 @@ class Scraper:
         #             return dump_images
         #     except Exception as ex:
         #         print(ex)
-                
+    
+   
     
     def main(self) -> None:
         
         
         self.scrape()
-        print(self.scrape())
+        # print(self.scrape())
         self.download_image()
         print(self.download_image())
-        self.get_dataframe()
+        # self.get_dataframe()
         # print(self.get_dataframe)
         self.connect_to_db()
+        
         # self.scrape()
         # self.get_job_details()
         # self.indeed_full_data()
