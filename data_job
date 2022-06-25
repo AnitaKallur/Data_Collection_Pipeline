@@ -1,0 +1,7 @@
+CREATE TABLE dataframe(Job_URL varchar,
+                Unique_ID varchar, 
+                Job_Title varchar,
+                Name_of_the_company varchar,
+                Company_Location varchar,
+                Salary_package varchar);
+                

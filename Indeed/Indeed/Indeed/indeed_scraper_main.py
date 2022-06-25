@@ -86,12 +86,11 @@ class Scraper:
     
     
     def get_dataframe(self):
-        self.job_data = jobs_dataframe
         df = pd.DataFrame.from_dict(job_indeed)
         df=df.loc[:, ~df.columns.str.contains('^Unnamed')]
-        df.to_csv = ('dataframe_indeed.csv')
-        df.to_csv= (r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/dataframe_indeed.csv')
-        print(df)
+        df.to_csv = ('dataframe_indeed_jobs.csv')
+        # df.to_csv= ('dataframe_indeed_jobs.csv', '/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline')
+        print(f"data created: ", df.to_csv)
         # df = pd.DataFrame.from_dict(jobs_dataframe,  orient='index')
         # df.to_csv = ('jobs_data.csv')
         # df.to_csv= ('/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed')
@@ -222,11 +221,11 @@ class Scraper:
                         'Job_Title': job_details_dictionary['Title'],
                         'Name_of_the_company': job_details_dictionary['Company_Name'],
                         'Location': job_details_dictionary['Company_Location']}
-                    # 'Salary Package': job_details_dictionary['Salary']}
+                        # 'Salary Package': job_details_dictionary['Salary_Package']}
             # print(jobs_dataframe)
             # print(jobs_dataframe)
-            # df = pd.DataFrame.from_dict(jobs_dataframe,  orient='index')
-            # df.to_csv = ('df.csv')
+            # df = pd.DataFrame.from_dict(jobs_dataframe, orient='index', columns=['Job_Link', 'Unique_ID', 'Job_Title', 'Comapany_Name', 'Company_Location'])
+            # df.to_csv = ('data_frame.csv')
             # df.to_csv= ('/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed')
             # print(df)
             # # print(list_of_all_jobs_details)
