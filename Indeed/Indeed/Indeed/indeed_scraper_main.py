@@ -1,8 +1,10 @@
 from operator import index
 from urllib import response
+from cv2 import sepFilter2D
 from matplotlib.pyplot import axis
 from selenium import webdriver
 from bs4 import BeautifulSoup as bs
+import requests
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -39,28 +41,44 @@ class Scraper:
     def __init__(self) -> None:
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
         self.url = self.driver.get("https://uk.indeed.com/jobs?q=data%20engineer%20or%20data%20scientist&l=Greater%20London&vjk=f11971796d62ded9")
+        self.url_bs = ("https://uk.indeed.com/jobs?q=data%20engineer%20or%20data%20scientist&l=Greater%20London&vjk=f11971796d62ded9")
+        
         
         
         self.job_containers = self.driver.find_elements(by=By.XPATH, value="//ul[@class='jobsearch-ResultsList']//div[@class='slider_container css-11g4k3a eu4oa1w0']")
         self.driver.maximize_window()
         
         
-       
-        # while True:   
+        
+        
+    def get_record(self): 
             
-        #     indeed_pagination = self.driver.find_element(by=By.XPATH, value="//span[@class='pn']").click()
+        while True:   
+            try:
+                self.pagination = self.soup.find('a', {'aria-label': 'Next'}).get('href')
+            except AttributeError:
+                break
+        self.response = requests.get(self.pagination)
+        self.soup = bs(self.response.text, "html.parser")
+        self.response = requests.get(self.url_bs)
+        cards = self.soup.find_all('div', 'jobsearch-SerpJobCard')
+        records = []
+        for card in cards:
+            self.record = self.get_record(card)
+        records.append(self.record)
+            # indeed_pagination = self.driver.find_element(by=By.XPATH, value="//a[@aria-label='Next']").get_attribute('href')
+            # indeed_pagination.c
+            # sleep(3)
+            # pagination_popup = self.driver.find_element(by=By.XPATH, value="//div[@id='popover-x']")
+            # pagination_popup.click()
+            # sleep(3) 
             
-        #     sleep(3)
-        #     pagination_popup = self.driver.find_element(by=By.XPATH, value="//div[@id='popover-x']")
-        #     pagination_popup.click()
-        #     sleep(3) 
-            
-        #     indeed_pagination += 1
-        #     sleep(2)
-        #     if indeed_pagination > 5:
-        #         break
-        #     else:
-        #         break
+            # self_pagination += 1
+            # sleep(2)
+            # if indeed_pagination > 3:
+            #     break
+            # else:
+            #     break
         
     def scrape(self):
         """Assigning a new method to call another method"""
@@ -97,7 +115,7 @@ class Scraper:
         # inspector.get_table_names()
         engine.execute('''SELECT * FROM dataframe_jobs''').fetchall()
         jobs = pd.read_sql_table('dataframe_jobs', engine)
-        print(jobs)
+        # print(jobs)
     # def aws_upload(self, df):
         df.to_json('/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Data_jobs.json', orient='records', lines=True )
         
@@ -254,6 +272,7 @@ class Scraper:
             # except:
             #     pass
             list_of_all_jobs_details.append(job_details_dictionary)
+            print(list_of_all_jobs_details)
         return list_of_all_jobs_details
         
  
@@ -302,7 +321,7 @@ class Scraper:
         
         
         self.scrape()
-        # print(self.scrape())
+        print(self.scrape())
         self.download_image()
         print(self.download_image())
         # self.get_dataframe()
