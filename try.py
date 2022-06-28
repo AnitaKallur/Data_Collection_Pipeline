@@ -59,18 +59,22 @@ class Scraper:
         # url = response.get("https://uk.indeed.com/jobs?q=data%20engineer%20or%20data%20scientist&l=Greater%20London&vjk=f11971796d62ded9")
         
         while True:   
+            self.response = requests.get(self.url_bs)
+            self.soup = bs(self.response.text, "html.parser")
+            self.response = requests.get(self.url_bs)
+            cards = self.soup.find_all('div', 'jobsearch-SerpJobCard')
+            for card in cards:
+                self.record = self.get_record(card)
+                records.append(self.record)
+            print(len(records))
             try:
-                self.pagination = self.soup.find('a', {'aria-label': 'Next'}).get('href')
+                self.pagination = 'https://www.indeed.com'+ self.soup.find('a', {'aria-label': 'Next'}).get('href')
+                # self.pagination.click()
             except AttributeError:
                 break
-        self.response = requests.get(self.url_bs)
-        self.soup = bs(self.response.text, "html.parser")
-        self.response = requests.get(self.url_bs)
-        cards = self.soup.find_all('div', 'jobsearch-SerpJobCard')
         
-        for card in cards:
-            self.record = self.get_record(card)
-            records.append(self.record)
+        
+        
             
             
     def nevigate_page(self) -> None:
@@ -123,7 +127,7 @@ class Scraper:
             # except:
             #     pass
             list_of_all_jobs_details.append(job_details_dictionary)
-            print(list_of_all_jobs_details)
+            # print(list_of_all_jobs_details)
         return list_of_all_jobs_details
     def main(self) -> None:
         self.nevigate_page()
