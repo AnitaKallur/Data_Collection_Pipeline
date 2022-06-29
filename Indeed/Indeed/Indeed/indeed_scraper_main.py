@@ -58,14 +58,15 @@ class Scraper:
                 self.pagination = self.soup.find('a', {'aria-label': 'Next'}).get('href')
             except AttributeError:
                 break
-        self.response = requests.get(self.pagination)
-        self.soup = bs(self.response.text, "html.parser")
-        self.response = requests.get(self.url_bs)
-        cards = self.soup.find_all('div', 'jobsearch-SerpJobCard')
-        records = []
-        for card in cards:
-            self.record = self.get_record(card)
-        records.append(self.record)
+            self.response = requests.get(self.pagination)
+            self.soup = bs(self.response.text, "html.parser")
+            self.response = requests.get(self.url_bs)
+            cards = self.soup.find_all('div', 'jobsearch-SerpJobCard')
+            records = []
+            for card in cards:
+                self.record = self.get_record(card)
+            records.append(self.record)
+            print(len(records))
             # indeed_pagination = self.driver.find_element(by=By.XPATH, value="//a[@aria-label='Next']").get_attribute('href')
             # indeed_pagination.c
             # sleep(3)
@@ -319,7 +320,7 @@ class Scraper:
     
     def main(self) -> None:
         
-        
+        self.get_record()
         self.scrape()
         print(self.scrape())
         self.download_image()

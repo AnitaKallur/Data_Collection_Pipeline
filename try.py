@@ -59,10 +59,12 @@ class Scraper:
         # url = response.get("https://uk.indeed.com/jobs?q=data%20engineer%20or%20data%20scientist&l=Greater%20London&vjk=f11971796d62ded9")
         
         while True:   
+            pagination = self.driver.find_element(by=By.XPATH, value="//a[@aria-label='Next']").click()
             self.response = requests.get(self.url_bs)
             self.soup = bs(self.response.text, "html.parser")
-            self.response = requests.get(self.url_bs)
+            # self.response = requests.get(self.url_bs)
             cards = self.soup.find_all('div', 'jobsearch-SerpJobCard')
+            pagination += 1
             for card in cards:
                 self.record = self.get_record(card)
                 records.append(self.record)
