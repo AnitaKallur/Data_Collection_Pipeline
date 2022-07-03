@@ -37,44 +37,57 @@ from sqlalchemy import create_engine
 from sqlalchemy import inspect
 
 def extract(page):
-    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'}
+    # headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'}
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
     s_url = driver.get("https://uk.indeed.com/jobs?q=Data%20Engineer%20or%20Data%20Scientist%20&l=London%2C%20Greater%20London&start={page}")
     url = (f'https://uk.indeed.com/jobs?q=Data%20Engineer%20or%20Data%20Scientist%20&l=London%2C%20Greater%20London&start={page}')
-    r = requests.get(url, headers)
-    soup = bs(r.content, 'html.parser')
-    return soup
-def scrape(self):
-    """Assigning a new method to call another method"""
-    # self.nevigate_page()
-    # self.__get_job_details(self.job_containers)
-    global job_indeed
-    job_indeed = get_job_details(self.job_containers)
+    response = requests.get(url)
+    soup = bs(response.content, 'html.parser')
+    cards = soup.find_all('div', 'jobsearch-SerpJobcard')
+    print(cards)
+    # print(response.json)
+    # print(response.text)
     
-def get_job_details(self, job_containers):
+    # print(cards)
+# extract()
+    # return soup
+# def scrape(self, job_indeed):
+#     """Assigning a new method to call another method"""
+#     # self.nevigate_page()
+#     # self.__get_job_details(self.job_containers)
+#         # global job_indeed
+#     job_indeed = self.get_job_details()
     
-    """ Scraping all the details related to the job post"""
-    list_of_all_jobs_details = []
     
-    for job_listing in job_containers:
-        global job_details_dictionary
-        job_details_dictionary = dict()
-        job_details_dictionary["Job_Link"] = job_listing.find_element(by=By.XPATH, value=".//a").get_attribute('href')
-        job_details_dictionary["Unique_ID"] = job_listing.find_element(by=By.XPATH, value=".//a").get_attribute('id')
-        job_details_dictionary["Title"] = job_listing.find_element(by=By.XPATH, value=".//h2").text
-        job_details_dictionary["Company_Name"] = job_listing.find_element(by=By.XPATH, value=".//div/span[@class='companyName']").text
-        job_details_dictionary["Company_Location"] = job_listing.find_element(by=By.XPATH, value=".//div[@class='companyLocation']").text
-        try:
-            job_details_dictionary["Salary"] = job_listing.find_element(by=By.XPATH, value= ".//div[@class='metadata salary-snippet-container']").get_attribute('textContent')
-        except:
-            pass   
-        list_of_all_jobs_details.append(job_details_dictionary)
-        print(list_of_all_jobs_details)
-    # return list_of_all_jobs_details
+    
+    
+    
+    
+# def get_job_details(self, job_containers):
+    
+#     """ Scraping all the details related to the job post"""
+#     list_of_all_jobs_details = []
+    
+#     for job_listing in job_containers:
+#         global job_details_dictionary
+#         job_details_dictionary = dict()
+#         job_details_dictionary["Job_Link"] = job_listing.find_element(by=By.XPATH, value=".//a").get_attribute('href')
+#         job_details_dictionary["Unique_ID"] = job_listing.find_element(by=By.XPATH, value=".//a").get_attribute('id')
+#         job_details_dictionary["Title"] = job_listing.find_element(by=By.XPATH, value=".//h2").text
+#         job_details_dictionary["Company_Name"] = job_listing.find_element(by=By.XPATH, value=".//div/span[@class='companyName']").text
+#         job_details_dictionary["Company_Location"] = job_listing.find_element(by=By.XPATH, value=".//div[@class='companyLocation']").text
+#         try:
+#             job_details_dictionary["Salary"] = job_listing.find_element(by=By.XPATH, value= ".//div[@class='metadata salary-snippet-container']").get_attribute('textContent')
+#         except:
+#             pass   
+#         list_of_all_jobs_details.append(job_details_dictionary)
+#         print(list_of_all_jobs_details)
+#     # return list_of_all_jobs_details
   
 extract(page='https://uk.indeed.com/jobs?q=Data%20Engineer%20or%20Data%20Scientist%20&l=London%2C%20Greater%20London&start=0')
 # get_job_details()
-scrape(self=job_indeed)
+# get_job_details()
+# scrape(self=job_indeed)
 
 # def transform(soup):
 #     divs = soup.find_all('div', class_ = 'jobsearch-SerpJobCard')
