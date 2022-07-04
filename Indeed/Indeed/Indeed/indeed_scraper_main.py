@@ -48,25 +48,27 @@ class Scraper:
         self.job_containers = self.driver.find_elements(by=By.XPATH, value="//ul[@class='jobsearch-ResultsList']//div[@class='slider_container css-11g4k3a eu4oa1w0']")
         self.driver.maximize_window()
         
+        # pagination = self.driver.find_element(by=By.XPATH, value = "//a[@aria-label='2']")
+        # pagination.click()
+    
         
         
-        
-    def get_record(self): 
+    # def get_record(self): 
             
-        while True:   
-            try:
-                self.pagination = self.soup.find('a', {'aria-label': 'Next'}).get('href')
-            except AttributeError:
-                break
-            self.response = requests.get(self.pagination)
-            self.soup = bs(self.response.text, "html.parser")
-            self.response = requests.get(self.url_bs)
-            cards = self.soup.find_all('div', 'jobsearch-SerpJobCard')
-            records = []
-            for card in cards:
-                self.record = self.get_record(card)
-            records.append(self.record)
-            print(len(records))
+    #     while True:   
+    #         try:
+    #             self.pagination = self.soup.find('a', {'aria-label': 'Next'}).get('href')
+    #         except AttributeError:
+    #             break
+    #         self.response = requests.get(self.pagination)
+    #         self.soup = bs(self.response.text, "html.parser")
+    #         self.response = requests.get(self.url_bs)
+    #         cards = self.soup.find_all('div', 'jobsearch-SerpJobCard')
+    #         records = []
+    #         for card in cards:
+    #             self.record = self.get_record(card)
+    #         records.append(self.record)
+    #         print(len(records))
             # indeed_pagination = self.driver.find_element(by=By.XPATH, value="//a[@aria-label='Next']").get_attribute('href')
             # indeed_pagination.c
             # sleep(3)
@@ -280,7 +282,7 @@ class Scraper:
     def download_image(self):
         """ This will help to download the images/logos from the webpage"""
         # image_url = ("https://uk.indeed.com/jobs?q=data%20engineer%20or%20data%20scientist&l=Greater%20London&vjk=f11971796d62ded9")
-        image_content = self.driver.find_element(by=By.XPATH, value= "//a[@class='jcs-JobTitle']").get_attribute('href')
+        # image_content = self.driver.find_element(by=By.XPATH, value= "//a[@class='jcs-JobTitle']").get_attribute('href')
         
         # image_content.click()
         global image_download
@@ -288,7 +290,7 @@ class Scraper:
         for i in image_download:
             img_src = i.get_attribute("src")
             return img_src
-        print(image_content)
+        # print(image_content)
         """Saving the images in json file"""
         with open("Image_jobs.json", "w") as fp:
             json.dump(image_download, fp, indent=4)
@@ -320,7 +322,7 @@ class Scraper:
     
     def main(self) -> None:
         
-        self.get_record()
+        # self.get_record()
         self.scrape()
         print(self.scrape())
         self.download_image()
