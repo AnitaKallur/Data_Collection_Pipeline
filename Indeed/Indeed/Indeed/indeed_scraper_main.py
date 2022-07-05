@@ -258,6 +258,7 @@ class Scraper:
     def get_job_details(self, job_containers):
         """ Scraping all the details related to the job post"""
         list_of_all_jobs_details = []
+        new_unique_id = []
         for job_listing in job_containers:
             global job_details_dictionary
             job_details_dictionary = dict()
@@ -274,6 +275,12 @@ class Scraper:
             #     job_details_dictionary["image"] = job_listing.find_element(by=By.XPATH, value= "//a[@class='jcs-JobTitle']").get_attribute('href')  
             # except:
             #     pass
+            
+            if new_unique_id not in job_details_dictionary["Unique_ID"]:
+                list_of_all_jobs_details.append(new_unique_id)
+            else:
+                print("Item already in the list")
+    
             list_of_all_jobs_details.append(job_details_dictionary)
             print(list_of_all_jobs_details)
         return list_of_all_jobs_details
