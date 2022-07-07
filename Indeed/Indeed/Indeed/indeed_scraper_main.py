@@ -142,103 +142,10 @@ class Scraper:
         #remove json files from the system
         os.remove('/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Data_jobs.json')
         df.to_json
-        # print(jobs)
-        # engine = create_engine("{type of database}+{DBAPI}://{username}:{password}@{host}:{port}/{database_name}")
-        # end_point = 'database-1.c3qa23m8pxdu.eu-west-2.rds.amazonaws.com'
-        # HOST = 'localhost'
-        # HOST = 'database-1.c3qa23m8pxdu.eu-west-2.rds.amazonaws.com'
-        # dbname = 'my_database'
-        
-        # port = 5432
-        # user_name = 'postgres'
-        # DATABASE = 'postgres'
-        # # DATABASE = 'my_database'
-        # password = 'Database123!'
-        # # conn = None
-        # # cur = None
         
         
-        # try: 
-        #     with ps.connect(host = HOST, database = DATABASE, user = user_name,password = password, port= port) as conn :
-        #         with conn.cursor() as cur:
-        #             # sleep(5)
-        #             cur.execute("""SELECT * FROM dataframe_jobs
-        #                         """)
-        #             # sleep(5)
-        #     # print(type(cur))
-        #     records = cur.fetchall()
-        #     # sleep(5)
-        #     print(records)
-        # except ps.ProgrammingError as exc:
-        #     print (f"programming error: ", exc)
-        #     conn.rollback()
-        # except ps.InterfaceError as exc:
-        #     print (f"Interface error: ", exc)
-        #     conn = ps.connect(host = HOST, database = DATABASE, user = user_name,password = password, port= port)
-        # cur = conn.cursor()
-            # # df1 = pd.read_csv('job_indeed.csv')
-            # # file = "job_indeed.csv"
-            # # clean_table_name = file.lower().replace(" ", "").replace("?", "").replace(" ", "_")
-            # SQL_table= """create table dataframe_indeed
-            #     (Job_URL                varchar,
-            #     Unique_ID               varchar, 
-            #     Job_Title               varchar,
-            #     Name_of_the_company     varchar,
-            #     Company_Location        varchar,
-            #     Salary_package          varchar);"""
-            
-            # replacements = """{ 'object' : 'varchar',
-            #                 'float64' : 'float',
-            #                 'int64' : 'int',
-            #                 'datetime64' : 'datestamp', 
-            #                 'timedelta64(ns)': 'varchar'
-            #                 }
-            #     """
-            # # print(SQL_table)
-            
-            # cur.execute("drop table if exists dataframe_indeed.csv") 
-            
-            # cur.execute("create table dataframe_indeed (Job_URL varchar, ID varchar, Job_Title varchar, Name_of_the_company varchar, Company_Location varchar, Salary_package varchar)")
-            # print('table created')
-            # csv_files =[]
-            # for file in os.listdir(os.getcwd()):
-            #     if file.endswith('.csv'):
-            #         csv_files.append(file)
-            #         print(csv_files)
-            
-            # my_file = open('dataframe_indeed_jobs.csv', encoding='utf-8')
-            # print('file opened in memory')
-            
-            # SQL_STATEMENT = """
-            # COPY dataframe_jobs FROM STDIN WITH 
-            # CSV
-            # HEADER
-            # DELIMITER AS ','
-            # """
-            
-            # cur.copy_expert(sql=SQL_STATEMENT, file=my_file)
-            # print('file copied to db')
-            # create_data = (r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/dataframe_indeed_jobs.csv')
-            # cur.execute(create_data)
-            # ps.connect.commit()
-                 
-        # except ps.OperationalError as error:
-        #     print(error)
         
-            
-        # else:
-        #     print('Connected!')
-        #     return ps.connect
-        # finally:
-        #     if cur is not None:
-        #         cur.close()
-            # if ps.conn is not None:
-            #     ps.conn.close()
-        
-        # data_paths = [os.path.join(jobs_dataframe, f) for f in os.listdir(jobs_dataframe)]
-        # data_paths = [i for i in data_paths if os.path.isfile(i)]
-        # df.to_csv(r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed/Indeed', index=index, header=True)
-        
+       
     def nevigate_page(self) -> None:
         """ This will accept all cookies """
         # self.close_popup = self.driver.find_element(by=By.XPATH, value="//button[@onclick='closeGoogleOnlyModal()']")
