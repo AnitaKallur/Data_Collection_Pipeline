@@ -1,4 +1,5 @@
 from operator import index
+from ssl import Options
 from urllib import response
 from cv2 import sepFilter2D
 from matplotlib.pyplot import axis
@@ -11,6 +12,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
 import os
 import sys
 from numpy import product
@@ -39,7 +41,10 @@ from sqlalchemy import inspect
 class Scraper:
     """Using webdriver to automate the webpage"""
     def __init__(self) -> None:
-        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+        self.opt = Options()
+        self.opt.add_argument("--headless")
+        # self.driver = webdriver.Chrome(service= Service(ChromeDriverManager().install()))
+        self.driver = webdriver.Chrome(ChromeDriverManager().install(),options=self.opt )
         self.url = self.driver.get("https://uk.indeed.com/jobs?q=data%20engineer%20or%20data%20scientist&l=Greater%20London&vjk=f11971796d62ded9")
         self.url_bs = ("https://uk.indeed.com/jobs?q=data%20engineer%20or%20data%20scientist&l=Greater%20London&vjk=f11971796d62ded9")
         
@@ -151,8 +156,8 @@ class Scraper:
         # self.close_popup = self.driver.find_element(by=By.XPATH, value="//button[@onclick='closeGoogleOnlyModal()']")
         self.accept_cookies = self.driver.find_element(by=By.XPATH, value= "//button[@id='onetrust-accept-btn-handler']")
         self.accept_cookies.click()
-        self.third_element = self.driver.find_element(by=By.XPATH, value= "//div[@class='heading4 color-text-primary singleLineTitle tapItem-gutter']")
-        self.third_element.click()
+        # self.third_element = self.driver.find_element(by=By.XPATH, value= "//div[@class='heading4 color-text-primary singleLineTitle tapItem-gutter']")
+        # self.third_element.click()
         sleep(3)
         self.fourth_element = self.driver.find_element(by=By.XPATH, value="//td[@class='resultContent']")
     
