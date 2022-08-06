@@ -15,7 +15,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import json 
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
+
 # %matplotlib inline
 from numpy.random import randn
 import numpy as np
