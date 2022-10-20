@@ -1,4 +1,4 @@
-name: indeed_job_scraper_main
+name: indeed_scraper_main.py
 on:
   push:
     branches:
@@ -28,4 +28,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/job_indeed
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/anita0512
