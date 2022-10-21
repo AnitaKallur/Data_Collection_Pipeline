@@ -2,7 +2,7 @@ name: DATA_COLLECTION_PIPELINE
 on:
   push:
     branches:
-      - 'main'
+      - 'master'
 
 jobs:
   build:
