@@ -1,0 +1,10 @@
+~/Library/Group\ Containers/group.com.docker/settings.json  
+{
+  "filesharingDirectories" : [
+    "\/Users",
+    "\/Volumes",
+    "\/private",
+    "\/tmp",
+    "\/var\/tmp"
+  ],
+…
