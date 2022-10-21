@@ -1,7 +1,6 @@
 
-from posixpath import split
+
 from matplotlib.pyplot import axis
-import requests
 from selenium import webdriver 
 from bs4 import BeautifulSoup as bs
 from selenium.webdriver.common.keys import Keys
@@ -14,26 +13,33 @@ from webdriver_manager.firefox import GeckoDriverManager
 from selenium.common.exceptions import NoSuchElementException
 from argparse import PARSER
 from argparse_prompt import PromptParser
+from tabulate import tabulate
+import requests, openpyxl
+import csv
 import os
 import sys
 from numpy import product
+import numpy as np
+from psycopg2.extensions import register_adapter, AsIs
 import json 
-import psycopg2 as ps
-import sqlalchemy
+import psycopg2
 import postgres
 import pandas as pd
-import numpy as np
+import io
 from io import StringIO
-import pandas as pd
 from pandas import DataFrame
 from time import sleep
 import uuid
+from io import StringIO
+
+from yaml import warnings
 uuid4 = uuid.uuid4()
 import boto3
-import plotly
 import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy import inspect
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 details_container = []
 
@@ -43,7 +49,7 @@ class Scraper:
     """Using webdriver to automate the webpage"""
     def __init__(self) -> None:
         options = FirefoxOptions()
-        # options.headless = True
+        options.headless = True
         # self.opt.add_argument("--headless")
         # self.driver = webdriver.Chrome(service= Service(ChromeDriverManager().install())
         
@@ -53,41 +59,97 @@ class Scraper:
         sleep(1)
   
         
-    def nevigate_page(self) -> None:
+    def navigate_page(self) -> None:
         """ This will accept all cookies """
         self.accept_cookies = self.driver.find_element(by=By.XPATH, value= "//button[@id='onetrust-accept-btn-handler']")
         self.accept_cookies.click()
         self.fourth_element = self.driver.find_element(by=By.XPATH, value="//td[@class='resultContent']")
         self.driver.find_elements(by=By.XPATH, value="//div[@id='mosaic-provider-jobcards']")
         sleep (2)
-        
-        for i in range(5):
+        self.data_scrape = []
+        for i in range(25):
             
             # df = pd.DataFrame(i)
-            
-            sleep(1)
+            # data_scrape = dict()
+            sleep(3)
             
             details_containers_job_container= self.driver.find_elements(by=By.XPATH, value="//div[@class='slider_item css-kyg8or eu4oa1w0']")
             sleep(3)
-            self.new_jobs = self.get_job_details(details_containers_job_container)
-            data_scrape = 0
-            data_scrape = (self.new_jobs[i])
             
-            # data_scrape += 1
-            print(len(data_scrape))
-            self.df = pd.DataFrame([data_scrape])
-            print(self.df)
-            # print([data_scrape])
-            # print(f' type of the the data is: ' , type(data_scrape))
+            self.new_jobs = self.get_job_details(details_containers_job_container) 
+             
+            
+            # print(self.data_scrape)
+            i+=1
             sleep(3)
-            # print(i)
-            # print(f'new job:{new_jobs}')
-            # self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight/3/4);")
-            # sleep(3)
-            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            sleep(1)
+            self.data_scrape.append(self.new_jobs)  
             
-            # df = pd.DataFrame.to_dict(new_jobs)
+            
+            
+            self.columns = ['Job_Link','Unique_ID', 'Title', 'Company_Name', 'Company_Location', 'Salary']
+            self.data_scrape.append(self.df)
+            self.data_scrape = [self.job_link,self.unique_id, self.title,  self.company_name,  self.company_location,  self.salary]
+            pages = 3
+            self.df_1 = pd.DataFrame(self.data_scrape, index=None)
+            # self.df_1.transpose()
+            # self.df_2 = pd.concat(self.df, self.df_1)
+            
+            self.df_1 =self.df_1.transpose()
+            self.df_1.columns = self.columns
+            
+            # page+=1
+            
+            
+            
+            print(self.df_1)
+            sleep(3)
+            if os.path.exists('Indeed_data_nw.csv'):
+                self.df_1.to_csv('Indeed_data_new.csv',mode='a',header=True, index=False)
+            else:
+                self.df_1.to_csv('Indeed_data_new.csv', mode='a',header=True, index=False)
+            # print(self.data_scrape)
+            # print(self.data_scrape)
+            # self.data_scrape.append(self.df)
+            # self.df_1 - pd.DataFrame(self.data_scrape)
+            # self.data_scrape = list(self.df.values())
+            # print(self.data_scrape)
+            # self.data_scrape = zip(self.new_jobs.keys(), self.new_jobs.values())
+            # self.data_scrape = list(self.data_scrape)
+            # self.df_1 = self.data_scrape.append(self.df)
+            # print(self.df_1)
+            # self.df_1 = self.df_1.to_csv("datascrape_new.csv", index=False, na_rep ='None', quoting = False, index_label=None, line_terminator='\n',quotechar=' ')
+            # print(self.df_1)
+            # self.df_1 = self.df_1.transpose()
+            # print(self.df_1)
+            # print(type(self.df_1))
+            # print(self.df_1)
+            # for key, val in self.df.items():
+            #     self.data_scrape.append([key,val])
+            #     print(self.data_scrape)
+            # self.data_scrape = ({'Job_Link':self.job_link,'Unique_ID': self.unique_id, 'Title': self.title, 'Company_Name': self.company_name, 'Company_Location': self.company_location, 'Salary': self.salary})
+            # self.columns=['Job_Link','Unique_ID', 'Title', 'Company_Name', 'Company_Location', 'Salary']
+            # self.df_1 = pd.DataFrame(self.data_scrape, index=None, columns=self.columns)
+            # print(self.df_1)
+            # print(len(self.df_1.columns))
+            # self.data_f = pd.DataFrame([self.data_scrape])
+            # print(len(self.df.columns))
+            # print(self.data_scrape)
+            # # self.df.loc[len(self.df)]= self.data_scrape
+            # print(self.df2)
+            
+           
+            # print(len(self.data_f.columns))
+            # self.data_f.columns = ['Job_Link','Unique_ID', 'Title', 'Company_Name', 'Company_Location', 'Salary']
+            # # print(self.data_f)
+            # print(self.data_f)
+            # df = pd.read_csv(io.StringIO(self.data_f), delim_whitespace=True, header=None, names=['Job_Link','Unique_ID', 'Title', 'Company_Name', 'Company_Location', 'Salary'])
+            # print(df)
+            # self.df_1.to_csv("data.csv", index=False, na_rep ='None', quoting = False, index_label=None, line_terminator='\n',quotechar=' ')
+            # print(self.data_scrape)
+            
+            sleep(3)
+            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            sleep(2)
            
             try:
                 sleep(0.5)
@@ -123,35 +185,34 @@ class Scraper:
             except:
                 # print("This id-label='popupover-x' doesn't exist")
                 pass
-                
-            
+                     
             try:
                 sleep(0.5)
                 self.driver.find_element(by=By.XPATH, value="//a[@data-testid='pagination-page-next']").click()
             except:
                 # print("pagination failed")
                 pass
-            
-            save_path = '/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline'
-            if not os.path.exists(f'{save_path}/Indeed_jobs_Dataframe'):
-                    os.makedirs(f'{save_path}/Indeed_jobs_Dataframe')
+    def data_store(self):
+        dfs = []
+        save_path = '/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline'
+        if not os.path.exists(f'{save_path}/Indeed_jobs_Dataframe'):
+                os.makedirs(f'{save_path}/Indeed_jobs_Dataframe')
 
-            with open(f'{save_path}/Indeed_jobs_Dataframe/Indeed_jobs.json', 'w+') as fp:
-                    json.dump(self.new_jobs, fp,  indent=4)
-            
-            # self.df = pd.DataFrame.from_dict([data_scrape]) 
-            # self.df.to_csv(r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Indeed_jobs_.csv', 
-            # index = False, header=True)
-            # self.df +=1
-    
-            if os.path.exists(f'{save_path}/Indeed_jobs_Dataframe/dataframe_Indeed_jobs.csv') and os.path.exists(f'{save_path}/Indeed_jobs_Dataframe/Indeed_jobs.json'):
-                self.saving_data = True
-                return self.saving_data, save_path
+        with open(f'{save_path}/Indeed_jobs_Dataframe/data_jobs_new.json', 'w+') as fp:
+                json.dump(self.new_jobs, fp,  indent=4)
+        # column_names = ['Job_Link' ,'Unique_ID','Title','Company_Name','Company_Location','Salary']
+        # with open(self.data_f, 'r', newline='') as f:
+        #     reader = csv.reader(f)
+        #     # Skip header row
+        #     next(reader)
+        # self.data_f.to_csv(r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/data_jobs_new.csv', 
+        # index=False, quoting = False, index_label=None, header = None,line_terminator='\n', quotechar=' ')
+        # # self.data_f.to_excel(r'/Users/prabhuswamikallur/Desktop/data_jobs_new.xlsx', index= None, header=True )
+        # # self.df +=1
 
-            # print(self.df)
-            
-        # print(df)
-            # print(final_df)
+        if os.path.exists(f'{save_path}/Indeed_jobs_Dataframe/data_jobs_new.csv') and os.path.exists(f'{save_path}/Indeed_jobs_Dataframe/Indeed_jobs.json'):
+            self.saving_data = True
+            return self.saving_data, save_path
             
     def page_scroll(self) -> None:
         self.scrape()
@@ -167,7 +228,7 @@ class Scraper:
         while i < self.number_of_scrolls:
             
             # print(self.df)
-            print(f"scrolled {i} time(s)")
+            # print(f"scrolled {i} time(s)")
             sleep(1)
             self.driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
             sleep(1)
@@ -187,51 +248,34 @@ class Scraper:
         # self.nevigate_page()
         # self.__get__job_details(self.job_containers)
         self.get_job_details(details_container)
-        
-        # print(job_indeed)
-        # list_of_jobs = dict()
-        # list_of_jobs = self.get_job_details(details_container=self.job_containers)
-        # with open("jobs.json", "w") as outfile:
-        #     json.dump(job_indeed, outfile, indent=4)
-        #     # print(job_indeed)
-        # return job_indeed
-            # print list_of_jobs
-        # save_path = '/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline'
-        # if not os.path.exists(f'{save_path}/Indeed_Dataframe'):
-        #         os.makedirs(f'{save_path}/Indeed_Dataframe')
-
-        # with open(f'{save_path}/Indeed_Dataframe/Data_jobs.json', 'w+') as fp:
-        #     json.dump(job_indeed, fp,  indent=4)
-        # global df
-        # df = pd.DataFrame.from_dict(job_indeed) 
-        # df.to_csv(r'/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/dataframe_indeed_jobs.csv', 
-        # index = False, header=True)
-        # # print(df)
-
-        # if os.path.exists(f'{save_path}/Indeed_Dataframe/dataframe_indeed_jobs.csv') and os.path.exists(f'{save_path}/Indeed_Dataframe/Data_jobs.json'):
-        #     self.saving_data = True
-        #     return self.saving_data, save_path
-       
+              
     def connect_to_db(self):
         DATABASE_TYPE = 'postgresql'
         DBAPI = 'psycopg2'
         HOST = 'localhost'
         USER = 'postgres'
-        PASSWORD = 'Database123!'
-        DATABASE = 'postgres'
+        PASSWORD = 'postgres'
+        DATABASE = 'job_indeed'
         PORT = 5432
+        
+        # self.engine =pymysql.connect(
+        # HOST=HOST,
+        # USER=USER,
+        # PASSWORD=PASSWORD,
+        # DATABASE=DATABASE,
+        # autocommit=True)
         self.engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
         self.engine.connect()
         # inspector = inspect(engine)
         # inspector.get_table_names()
-        self.engine.execute('''SELECT * FROM dataframe_jobs''').fetchall()
-        jobs = pd.read_sql_table('dataframe_jobs', self.engine)
-        # print(jobs)
+        self.engine.execute('''SELECT * FROM indeed_jobs''').fetchall()
+        jobs = pd.read_sql_table('indeed_jobs', self.engine)
+        print(jobs)
     def aws_upload(self):
-        self.df.to_json('/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Data_jobs.json', orient='records', lines=True )
+        self.df_1.to_json('/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Data_jobs.json', orient='records', lines=True )
         
         #send df back to Aws RDS
-        self.df.to_sql("dataframe_jobs", self.engine, if_exists="replace")
+        self.df_1.to_sql("indeed_jobs", self.engine, if_exists="replace")
 
     
         #upload json S3 bucket     
@@ -263,7 +307,11 @@ class Scraper:
         s3 = boto3.resource('s3')
         my_bucket = s3.Bucket('databaseindeed')
         for file in my_bucket.objects.all():
-            print(file.key)
+            return file.key
+        
+        s3 = boto3.client('s3')
+        s3.download_file('databaseindeed', )
+            # print(file.key)
         # s3 = boto3.client('s3')
         # s3.download_file('Data_jobs.json', 'databaseindeed', 'jobs_data.json')
         
@@ -273,7 +321,7 @@ class Scraper:
                    
         #remove json files from the system
         os.remove('/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/Data_jobs.json')
-        self.df.to_json 
+        self.df_1.to_json 
         
         # s3_client = boto3.client('s3')
         # response = s3_client.upload_file('Data_jobs.json', 'databaseindeed', 'jobs_data.json')
@@ -305,58 +353,76 @@ class Scraper:
         # global details_container
         new_unique_id = [] 
         # while True:
-        
+        self.job_link =[]
+        self.unique_id = []
+        self.title = []
+        self.company_name =[]
+        self.company_location =[]
+        self.salary = []
         for job_listing in details_container:
             # global job_details_dictionary
             job_details_dictionary = dict()
-            
-            job_details_dictionary["Job_Link"] = job_listing.find_element(by=By.XPATH, value=".//a").get_attribute('href')
-            job_details_dictionary["Unique_ID"] = job_listing.find_element(by=By.XPATH, value=".//a").get_attribute('id')
-            # job_details_dictionary["Title"] = job_listing.find_element(by=By.XPATH, value=".//h2").text
-            job_details_dictionary["Title"] = job_listing.find_element(by=By.XPATH, value="//a[@class='jcs-JobTitle css-jspxzf eu4oa1w0']").text
-            job_details_dictionary["Company_Name"] = job_listing.find_element(by=By.XPATH, value=".//div/span[@class='companyName']").text
-            job_details_dictionary["Company_Location"] = job_listing.find_element(by=By.XPATH, value=".//div[@class='companyLocation']").text
             try:
-                job_details_dictionary["Salary"] = job_listing.find_element(by=By.XPATH, value= ".//div[@class='metadata salary-snippet-container']").get_attribute('textContent')
-            except:
-                pass   
-            # break
-            # try:
-            #     job_details_dictionary["image"] = job_listing.find_element(by=By.XPATH, value= "//a[@class='jcs-JobTitle']").get_attribute('href')  
-            # except:
-            #     pass
-            
-            # if new_unique_id not in job_details_dictionary["Unique_ID"]:
-            #     list_of_all_jobs_details.append(new_unique_id)
-            # else:
-            #     print("Item already in the list")
-    
-            list_of_all_jobs_details.append(job_details_dictionary)
-            # print(list_of_all_jobs_details)
-            # df = pd.DataFrame(list_of_all_jobs_details)
-        return list_of_all_jobs_details
-    
- 
+                job_links = job_listing.find_element(by=By.XPATH, value=".//a").get_attribute('href')
+                self.job_link.append(job_links)
+            except NoSuchElementException:
+                self.job_link.append('NaN')
+                
+            try:
+                job_id = job_listing.find_element(by=By.XPATH, value=".//a").get_attribute('id')
+                self.unique_id.append(job_id)
+            except NoSuchElementException:
+                self.unique_id.append('NaN')
+            # job_details_dictionary["Title"] = job_listing.find_element(by=By.XPATH, value=".//h2").text
+            try:
+                job_titile = job_listing.find_element(by=By.XPATH, value="//a[@class='jcs-JobTitle css-jspxzf eu4oa1w0']").text
+                self.title.append(job_titile)
+            except NoSuchElementException:
+                self.title.append('NaN')
+            try:
+                job_company = job_listing.find_element(by=By.XPATH, value=".//div/span[@class='companyName']").text
+                self.company_name.append(job_company)
+            except NoSuchElementException:
+                self.company_name.append('NaN')
+            try:
+                job_location = job_listing.find_element(by=By.XPATH, value=".//div[@class='companyLocation']").text
+                self.company_location.append(job_location)
+            except NoSuchElementException:
+                self.company_location.append('NaN')
+            try:
+                job_salary = job_listing.find_element(by=By.XPATH, value= ".//div[@class='metadata salary-snippet-container']").get_attribute('textContent')
+                self.salary.append(job_salary)
+            except NoSuchElementException:
+                self.salary.append('NaN')
+  
+            self.df =pd.DataFrame ({'Job_Link':self.job_link,'Unique_ID': self.unique_id, 'Title': self.title, 'Company_Name': self.company_name, 'Company_Location': self.company_location, 'Salary': self.salary})
+           
     def download_image(self):
         """ This will help to download the images/logos from the webpage"""
-        # image_url = ("https://uk.indeed.com/jobs?q=data%20engineer%20or%20data%20scientist&l=Greater%20London&vjk=f11971796d62ded9")
-        # image_content = self.driver.find_element(by=By.XPATH, value= "//a[@class='jcs-JobTitle']").get_attribute('href')
-        
-        # image_content.click()
-        global image_download
-        image_download = self.driver.find_elements(by=By.XPATH, value="//img")
-        for i in image_download:
-            img_src = i.get_attribute("src")
-            return img_src
-        # print(image_content)
-        """Saving the images in json file"""
-        with open("Image_jobs.json", "w") as fp:
-            json.dump(image_download, fp, indent=4)
+       
+        images = []
+        image_container = self.driver.find_elements(by=By.XPATH, value="//img")
+        for img in image_container:
+            img_src =self.driver.find_element(by=By.XPATH, value="//img").get_attribute("src")
+            images.append(img_src)
+            
+        for i in range(len(images)):
+            if i >10:
+                break
+            response = requests.get(images[i])
+            file = open(r"/Users/prabhuswamikallur/Desktop/Data_Collection_Pipeline/logo.jpg"+str(i)+".jpg", "wb")  
+            file.write(response.content)  
+            
+        # """Saving the images in json file"""
+        # with open("Image_jobs.json", "w") as fp:
+        #     json.dump(images, fp, indent=4)
        
 
-    def main_jobs(self) -> None:
-        self.nevigate_page()
+            
+    def scraper_main(self) -> None:
+        self.navigate_page()
         self.page_scroll()
+        self.data_store()
         self.download_image()
         self.connect_to_db()
         self.aws_upload()
@@ -364,6 +430,6 @@ class Scraper:
         
 if __name__ == "__main__":
     DPS = Scraper()
-    DPS.main_jobs()
+    DPS.scraper_main()
 
         
