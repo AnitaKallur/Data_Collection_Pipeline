@@ -1,8 +1,8 @@
-name: DATA_COLLECTION_PIPELINE
+name: DCP Indeed Docker
 on:
   push:
     branches:
-      - 'master'
+      - 'main'
 
 jobs:
   build:
@@ -28,4 +28,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/anita0512
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/job_indeed
