@@ -1,4 +1,4 @@
-name: indeed_scraper_main.py
+name: DATA_COLLECTION_PIPELINE
 on:
   push:
     branches:
